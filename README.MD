@@ -1,4 +1,4 @@
-## Customer Data Collection
+# Customer Data Collection
 ## Introduction
 The goal of this assigment is to implement a customer data collection module for Drupal.
 The company "Cruiseship" is selling motorboard oil through third-party stores all around the
@@ -25,10 +25,10 @@ practices in the following areas:
 http://drupal.org/coding-standards.
 ## security: 
 http://drupal.org/writing-secure-code
-##internationalization and localization
+internationalization and localization
 
 ## Functional requirements
-## Participation in the contest
+#### Participation in the contest
 
 On the path /participate anonymous visitors can enter a unique contest code, their
 first name, last name and a valid e-mail address.
@@ -68,21 +68,21 @@ Put an introductory text above the input fields in the form on /participate.
 This text will need to be changed a couple of times as the contest approaches its end
 date. Therefore the editorial team of the website should be able to modify it
 themselves. Allow them to do so on the path
-## /admin/config/customer_data_collection.
+##### /admin/config/customer_data_collection.
 
 They can make use of any Drupal text format they have access to.
 On a fresh install the introductory text should be "Participate in the contest and win a
 luxurious 1-week cruise on the river Nile!", where "luxurious 1-week cruise on the
 river Nile" is emphasized.
 
-## Date of birth
+### Date of birth
 Add an additional required field to the form on /participate where visitors need to
 enter their date of birth. Use the label "Date of birth"
 Use the form element type suitable for dates from Drupal core.
 
 Limit the available birth years to the range [current year - 100] - [current year]
 
-##Closing note
+## Closing note
 
 Thanks to your perfect implementation of Cruiseship's requirements, the contest became a
 big success. Marketeers claim that in 1 year sales doubled as a result of this campaign.
