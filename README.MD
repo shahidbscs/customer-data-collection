@@ -21,10 +21,11 @@ Certain aspects necessary to make the module production-ready are not explicitly
 in the assignment. It's up to the implementer to think about these, while applying best
 practices in the following areas:
 
-## Drupal coding standards and naming conventions: 
+### Drupal coding standards and naming conventions: 
 http://drupal.org/coding-standards.
-## security: 
+### security: 
 http://drupal.org/writing-secure-code
+### Others
 internationalization and localization
 
 ## Functional requirements
@@ -41,7 +42,8 @@ Drupal offers.If an invalid e-mail address is supplied, display this validation 
 The contest code is checked against a list of known codes, stored in a database
 table foreseen by the module.
 
-On a fresh install, the following 4 contest codes are added to the list of known codes:
+On a fresh install, the following 4 contest codes are added to the list of 
+###### known codes:
 KKKK6666, TTTT9999, PPPP3333 and FFFF1111
 
 If someone tries to participate with an unknown contest code, display this validation
