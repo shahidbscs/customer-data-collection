@@ -1,0 +1,137 @@
+<?php
+
+/**
+ * @file
+ * Enables Cruiseship to collect customer data
+ */
+
+/**
+ * Implementation of hook_menu().
+ */
+function customer_data_collection_menu() {
+    $items = array();
+
+    $items['participate'] = array(
+        'title' => 'Example Form',
+        'description' => 'A form to mess around with.',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('customer_data_collection_form'),
+        'access callback' => TRUE
+    );
+
+    $items['admin/config/customer_data_collection'] = array(
+        'title' => 'Customer Data Collection',
+        'description' => 'Configuration for Customer Data Collection module',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('customer_data_collection_admin'),
+        'access arguments' => array('access administration pages'),
+        'type' => MENU_NORMAL_ITEM,
+        'file' => 'customer_data_collection_admin.inc',
+    );
+
+    return $items;
+}
+
+/**
+ * Implementation of hook_form().
+ */
+function customer_data_collection_form($form, &$form_state) {
+
+    $form['intro_text'] = array(
+        '#type' => 'markup',
+        '#markup' => variable_get('introduction_text'),
+    );
+    $form['contest_code'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Contest code',
+        '#size' => 8,
+        '#maxlength' => 8,
+        '#required' => TRUE
+    );
+    $form['first_name'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Your first name',
+        '#required' => TRUE
+    );
+    $form['last_name'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Your last name',
+        '#required' => TRUE
+    );
+    $form['email'] = array(
+        '#type' => 'textfield',
+        '#title' => 'Your e-mail address',
+        '#required' => TRUE
+    );
+
+    $form['submit_button'] = array(
+        '#type' => 'submit',
+        '#value' => t('Submit'),
+    );
+
+    return $form;
+}
+
+/**
+ * Implements customer_data_collection_form_validate
+ */
+function customer_data_collection_form_validate($form, &$form_state) {
+
+    _validate_contest_code ($form_state);
+    _validate_email($form_state);
+
+}
+
+/**
+ * Implements customer_data_collection_form_submit().
+ */
+function customer_data_collection_form_submit($form, &$form_state) {
+    db_insert('cruiseship_customer_data')
+        ->fields(array(
+            'known_code' => $form_state['values']['contest_code'],
+            'first_name' => $form_state['values']['first_name'],
+            'last_name' => $form_state['values']['last_name'],
+            'email' => $form_state['values']['email'],
+            'created' => time(),
+        ))->execute();
+
+    drupal_set_message("Your information successfully saved");
+}
+
+/**
+ * @param $form_state
+ * @validate email address
+ */
+function _validate_email(&$form_state) {
+    $valid_email = $form_state['values']['email'];
+
+    if (!valid_email_address($valid_email)) {
+        form_set_error('email', 'Invalid e-mail address {' . $valid_email . '}');
+    }
+
+    $result = db_query("SELECT * FROM {cruiseship_customer_data} WHERE email = :email",array(':email' => $valid_email))->fetchAll();
+
+    if(!(empty($result))) {
+        form_set_error('email', t('You cheater! This e-mail address {' . $valid_email . '} was used already.'));
+    }
+}
+
+/**
+ * @param $form_state
+ * @Validate Contest code
+ */
+function _validate_contest_code (&$form_state) {
+    $code_array = variable_get('cruiseship_know_codes');
+    $code = $form_state['values']['contest_code'];
+
+    if (!empty($code) && !in_array($code, $code_array)) {
+        form_set_error('contest_code', 'Unknown code {' . $code . '}');
+    }
+
+    $result = db_query("SELECT * FROM {cruiseship_customer_data} WHERE known_code = :code",array(':code' => $code))->fetchAll();
+
+    if(!(empty($result))) {
+        form_set_error('contest_code', t('You cheater! The code {' . $code . '} was used already.'));
+    }
+
+ }

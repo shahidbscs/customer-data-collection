@@ -1,0 +1,4 @@
+name = Customer Data Collection
+description = Collect customer data for "Cruiseship"
+package = Custom
+core = 7.x

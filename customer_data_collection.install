@@ -1,0 +1,116 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the customer data collection module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function customer_data_collection_schema() {
+  $schema = array();
+
+  $schema['contest_codes'] = array(
+    'description' => 'Stores cruiseship know codes',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique contest code serial number',
+      ),
+      'known_codes' => array(
+        'type' => 'varchar',
+        'length' => 8,
+        'not null' => TRUE,
+        'description' => 'Contest code for Cruiseship',
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  $schema['cruiseship_customer_data'] = array(
+    'description' => 'Stores cruiseship know codes',
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',
+        'not null' => TRUE,
+        'description' => 'Primary Key: Unique cruiseship customer serial number',
+      ),
+      'first_name' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'cruiseship customer first name.',
+      ),
+      'last_name' => array(
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'cruiseship customer last name.',
+      ),
+      'email' => array(
+        'type' => 'varchar',
+        'length' => 254,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => "cruiseship customer e-mail address.",
+      ),
+      'known_code' => array(
+        'type' => 'varchar',
+        'length' => 8,
+        'not null' => TRUE,
+        'description' => 'Contest code for Cruiseship',
+      ),
+      'created' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Timestamp for submission.',
+      ),
+    ),
+    'primary key' => array('id'),
+  );
+
+  return $schema;
+}
+
+
+/**
+ * Implementation of hook_install().
+ *
+ * @variable_set set variable cruiseship_know_codes
+ */
+function customer_data_collection_install() {
+  // Insert default code values
+  _contest_code_default_insert();
+}
+
+/**
+ * Implementation of hook_uninstall().
+ *
+ * @variable_del delete variable cruiseship_know_codes
+ */
+function customer_data_collection_uninstall() {
+  variable_del('cruiseship_know_codes');
+}
+
+/**
+ * Inserts default entry into contest_codes table
+ *
+ * @param $codes know code for cruiseship
+ */
+function _contest_code_default_insert() {
+   $know_codes = array('KKKK6666', 'TTTT9999', 'PPPP3333', 'FFFF1111');
+
+   $query = db_insert('contest_codes')->fields(array('known_codes'));
+   foreach ($know_codes as $code) {
+     $query->values(array('known_codes' => $code));
+   }
+   $query->execute();
+
+   // Set variable with know codes
+   variable_set('cruiseship_know_codes', $know_codes);
+}
