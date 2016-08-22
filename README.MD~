@@ -43,7 +43,7 @@ The contest code is checked against a list of known codes, stored in a database
 table foreseen by the module.
 
 On a fresh install, the following 4 contest codes are added to the list of 
-#### known codes:
+###### known codes:
 KKKK6666, TTTT9999, PPPP3333 and FFFF1111
 
 If someone tries to participate with an unknown contest code, display this validation
